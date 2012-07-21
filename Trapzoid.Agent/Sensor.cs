@@ -15,6 +15,7 @@ namespace Trapzoid.Agent {
     #endregion
 
     #region Properties
+    /// <summary> World state for the sensor </summary>
     public World World { get; private set; }
     #endregion
 

@@ -10,6 +10,7 @@ namespace Trapzoid {
       var engine = new Engine(world);
       engine.Sensor.World.DisplayWorld();
       // Calculate next best move
+      var turnResult = engine.Process();
       // Save state to memory
       // Write move to file    
       Console.Read();

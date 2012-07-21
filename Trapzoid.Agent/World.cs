@@ -56,9 +56,8 @@ namespace Trapzoid {
     }
 
     /// <summary>
-    /// Override the ToString method of base Object class
-    /// </summary>
-    /// <returns>A string representation of the world</returns>
+    /// Displays the world
+    /// </summary>    
     public void DisplayWorld() {
       for (var i = 0; i < width; i++) {
         for (var j = 0; j < height; j++) {

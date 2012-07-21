@@ -20,7 +20,18 @@ namespace Trapzoid.Agent {
     #endregion
 
     #region Properties
+    /// <summary> Sensor for the agent </summary>
     public Sensor Sensor { get; private set; }
+    #endregion
+
+    #region Public Methods
+    /// <summary>
+    /// Processes the turn for the agent
+    /// </summary>
+    /// <returns>The state that the world will for the turn</returns>
+    public World Process() {
+      return Sensor.World;
+    }
     #endregion
   }
 }
