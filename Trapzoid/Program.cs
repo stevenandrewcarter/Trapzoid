@@ -6,9 +6,9 @@ namespace Trapzoid {
   class Program {
     static void Main(string[] args) {
       // Read the state of the world
-      string[] world = File.ReadAllLines(@"worldstate.txt");
+      string[] world = File.ReadAllLines(args[0]);
       var engine = new Engine(world);
-      Console.Write(engine.Sensor.World.ToString());
+      engine.Sensor.World.DisplayWorld();
       // Calculate next best move
       // Save state to memory
       // Write move to file    

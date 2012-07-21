@@ -3,16 +3,6 @@
 namespace Trapzoid.Agent {
   
   /// <summary>
-  /// Internal States of the world
-  /// </summary>
-  public enum WorldState {
-    Empty = 0,
-    Wall = 1,
-    Player = 2,
-    Enemy = 3
-  }
-
-  /// <summary>
   /// Represents the agents view of the world
   /// </summary>
   public class Sensor {    
