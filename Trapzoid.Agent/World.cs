@@ -1,6 +1,6 @@
-﻿
-using System;
-namespace Trapzoid {
+﻿using System;
+
+namespace Trapzoid.Agent {
   
   /// <summary>
   /// Internal States of the world
