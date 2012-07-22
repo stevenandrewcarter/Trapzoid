@@ -12,7 +12,9 @@ namespace Trapzoid {
       // Calculate next best move
       var turnResult = engine.Process();
       // Save state to memory
-      // Write move to file    
+      // Write move to file  
+      string writeToFile = turnResult.GetWorld();
+      File.WriteAllText(args[0], writeToFile);
       Console.Read();
     }
   }

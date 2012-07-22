@@ -25,8 +25,8 @@ namespace Trapzoid.Agent {
     /// <param name="file">Input for the sensor</param>
     /// <returns>True if the sensors could detect the world, false if something goes wrong</returns>
     public bool Sense(string[] world) {
-      World = new World(world);
-      return true;
+      World = new World();
+      return World.BuildWorld(world);      
     }
     #endregion
   }

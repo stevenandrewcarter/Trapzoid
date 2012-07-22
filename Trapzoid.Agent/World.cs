@@ -1,17 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Trapzoid.Agent {
-  
-  /// <summary>
-  /// Internal States of the world
-  /// </summary>
-  public enum WorldState {
-    Clear = 0,
-    OwnWall = 1,
-    Player = 2,
-    Enemy = 3,
-    EnemyWall = 4
-  }
 
   /// <summary>
   /// Represents the world
@@ -19,19 +9,19 @@ namespace Trapzoid.Agent {
   public class World {
     #region Private variables
     /// <summary> Represents the world </summary>
-    private WorldState[,] world;
-    private int width;
-    private int height;
+    private Dictionary<int, Dictionary<int, Cell>> cells;    
     #endregion
 
     #region Constructor
     /// <summary>
     /// Default Constructor
-    /// </summary>
-    /// <param name="world">String of the world state</param>
-    public World(string[] world) {
-      BuildWorld(world);
+    /// </summary>    
+    public World() {
+      cells = new Dictionary<int, Dictionary<int, Cell>>();
     }
+    #endregion
+
+    #region Properties
     #endregion
 
     #region Public Methods
@@ -40,17 +30,23 @@ namespace Trapzoid.Agent {
     /// </summary>
     /// <param name="newWorld"></param>
     /// <returns></returns>
-    private bool BuildWorld(string[] newWorld) {
+    public bool BuildWorld(string[] newWorld) {
       bool builtWorld = false;
       if (newWorld.Length > 0) {
-        width = 30;
-        height = 30; 
-        world = new WorldState[width, height];
         for (var i = 0; i < newWorld.Length; i++) {
           string[] line = newWorld[i].Split(' ');
-          world[int.Parse(line[0]), int.Parse(line[1])] = GetWorldState(line[2]);
+          if (!cells.ContainsKey(int.Parse(line[0]))) {
+            cells.Add(int.Parse(line[0]), new Dictionary<int, Cell>());
+          }
+          if (!cells[int.Parse(line[0])].ContainsKey(int.Parse(line[1]))) {
+            cells[int.Parse(line[0])].Add(int.Parse(line[1]), new Cell() {
+              X = int.Parse(line[0]),
+              Y = int.Parse(line[1]),
+              Content = Cell.GetWorldState(line[2])
+            });
+          }
+          builtWorld = true;
         }
-        builtWorld = true;
       }
       return builtWorld;
     }
@@ -58,39 +54,34 @@ namespace Trapzoid.Agent {
     /// <summary>
     /// Displays the world
     /// </summary>    
-    public void DisplayWorld() {
-      for (var i = 0; i < width; i++) {
-        for (var j = 0; j < height; j++) {
-          switch (world[i, j]) {
-            case WorldState.Enemy: Console.BackgroundColor = ConsoleColor.Red; break;
-            case WorldState.EnemyWall: Console.BackgroundColor = ConsoleColor.DarkRed; break;
-            case WorldState.Player: Console.BackgroundColor = ConsoleColor.Blue; break;
-            case WorldState.OwnWall: Console.BackgroundColor = ConsoleColor.DarkBlue; break;
-            case WorldState.Clear: Console.BackgroundColor = ConsoleColor.Gray; break;
+    public void DisplayWorld() {      
+      for (int i = 0; i < cells.Count; i++) {
+        for (int j = 0; j < cells.Count; j++) {
+          switch (cells[i][j].Content) {
+            case CellContent.Opponent: Console.BackgroundColor = ConsoleColor.Red; break;
+            case CellContent.OpponentWall: Console.BackgroundColor = ConsoleColor.DarkRed; break;
+            case CellContent.You: Console.BackgroundColor = ConsoleColor.Blue; break;
+            case CellContent.YourWall: Console.BackgroundColor = ConsoleColor.DarkBlue; break;
+            case CellContent.Clear: Console.BackgroundColor = ConsoleColor.Gray; break;
           }
-          Console.Write((int)world[i, j]);          
+          Console.Write((int)cells[i][j].Content);                                
         }
         Console.WriteLine();
-      }      
-    }
-    #endregion
-
-    #region Private Methods
-    /// <summary>
-    /// Determines the World State from the input
-    /// </summary>
-    /// <param name="worldState"></param>
-    /// <returns></returns>
-    private WorldState GetWorldState(string worldState) {
-      WorldState state = WorldState.Clear;
-      switch (worldState) {
-        case "Clear": state = WorldState.Clear; break;
-        case "YourWall": state = WorldState.OwnWall; break;
-        case "You": state = WorldState.Player; break;
-        case "Opponent": state = WorldState.Enemy; break;
-        case "OppenentWall": state = WorldState.EnemyWall; break;
       }
-      return state;
+    }
+
+    /// <summary>
+    /// Gets the world as a string
+    /// </summary>
+    /// <returns></returns>
+    public string GetWorld() {
+      string result = "";
+      for (int i = 0; i < cells.Count; i++) {
+        for (int j = 0; j < cells.Count; j++) {
+          result += string.Format("{0} {1} {2}\r\n", cells[i][i].X, cells[i][i].Y, cells[i][i].Content);
+        }
+      }
+      return result;
     }
     #endregion
   }

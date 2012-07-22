@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Trapzoid.Agent {
   /// <summary>
   /// Calculates the state and makes the choice for the next move
@@ -11,13 +12,17 @@ namespace Trapzoid.Agent {
     /// </summary>
     public Engine(string[] world) {
       Sensor = new Sensor();
-      Sensor.Sense(world);
+      if (!Sensor.Sense(world)) {
+        throw new Exception("Critical Failure: Could not detect the world");
+      }
     }
     #endregion
 
     #region Properties
     /// <summary> Sensor for the agent </summary>
     public Sensor Sensor { get; private set; }
+    /// <summary> Result of the move </summary>
+    public World MoveResult { get; private set; }
     #endregion
 
     #region Public Methods
@@ -26,7 +31,8 @@ namespace Trapzoid.Agent {
     /// </summary>
     /// <returns>The state that the world will for the turn</returns>
     public World Process() {
-      return Sensor.World;
+      MoveResult = Sensor.World;
+      return MoveResult;
     }
     #endregion
   }
