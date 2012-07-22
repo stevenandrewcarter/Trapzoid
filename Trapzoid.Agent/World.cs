@@ -6,22 +6,20 @@ namespace Trapzoid.Agent {
   /// <summary>
   /// Represents the world
   /// </summary>
-  public class World {
-    #region Private variables
-    /// <summary> Represents the world </summary>
-    private Dictionary<int, Dictionary<int, Cell>> cells;    
-    #endregion
+  public class World {    
 
     #region Constructor
     /// <summary>
     /// Default Constructor
     /// </summary>    
     public World() {
-      cells = new Dictionary<int, Dictionary<int, Cell>>();
+      Cells = new Dictionary<int, Dictionary<int, Cell>>();
     }
     #endregion
 
     #region Properties
+    /// <summary> Represents the world </summary>
+    public Dictionary<int, Dictionary<int, Cell>> Cells { get; private set; }
     #endregion
 
     #region Public Methods
@@ -35,11 +33,11 @@ namespace Trapzoid.Agent {
       if (newWorld.Length > 0) {
         for (var i = 0; i < newWorld.Length; i++) {
           string[] line = newWorld[i].Split(' ');
-          if (!cells.ContainsKey(int.Parse(line[0]))) {
-            cells.Add(int.Parse(line[0]), new Dictionary<int, Cell>());
+          if (!Cells.ContainsKey(int.Parse(line[0]))) {
+            Cells.Add(int.Parse(line[0]), new Dictionary<int, Cell>());
           }
-          if (!cells[int.Parse(line[0])].ContainsKey(int.Parse(line[1]))) {
-            cells[int.Parse(line[0])].Add(int.Parse(line[1]), new Cell() {
+          if (!Cells[int.Parse(line[0])].ContainsKey(int.Parse(line[1]))) {
+            Cells[int.Parse(line[0])].Add(int.Parse(line[1]), new Cell() {
               X = int.Parse(line[0]),
               Y = int.Parse(line[1]),
               Content = Cell.GetWorldState(line[2])
@@ -54,17 +52,17 @@ namespace Trapzoid.Agent {
     /// <summary>
     /// Displays the world
     /// </summary>    
-    public void DisplayWorld() {      
-      for (int i = 0; i < cells.Count; i++) {
-        for (int j = 0; j < cells.Count; j++) {
-          switch (cells[i][j].Content) {
+    public void DisplayWorld() {
+      for (int i = 0; i < Cells.Count; i++) {
+        for (int j = 0; j < Cells.Count; j++) {
+          switch (Cells[i][j].Content) {
             case CellContent.Opponent: Console.BackgroundColor = ConsoleColor.Red; break;
             case CellContent.OpponentWall: Console.BackgroundColor = ConsoleColor.DarkRed; break;
             case CellContent.You: Console.BackgroundColor = ConsoleColor.Blue; break;
             case CellContent.YourWall: Console.BackgroundColor = ConsoleColor.DarkBlue; break;
             case CellContent.Clear: Console.BackgroundColor = ConsoleColor.Gray; break;
           }
-          Console.Write((int)cells[i][j].Content);                                
+          Console.Write((int)Cells[i][j].Content);                                
         }
         Console.WriteLine();
       }
@@ -76,9 +74,9 @@ namespace Trapzoid.Agent {
     /// <returns></returns>
     public string GetWorld() {
       string result = "";
-      for (int i = 0; i < cells.Count; i++) {
-        for (int j = 0; j < cells.Count; j++) {
-          result += string.Format("{0} {1} {2}\r\n", cells[i][i].X, cells[i][i].Y, cells[i][i].Content);
+      for (int i = 0; i < Cells.Count; i++) {
+        for (int j = 0; j < Cells.Count; j++) {
+          result += string.Format("{0} {1} {2}\r\n", Cells[i][j].X, Cells[i][j].Y, Cells[i][j].Content);
         }
       }
       return result;
