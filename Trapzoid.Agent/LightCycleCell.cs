@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Trapzoid.Agent {
-  public class LightCycleCell : Cell, IComparable {
+
+  /// <summary>
+  /// Cell which represents a light cycle
+  /// </summary>
+  public class LightCycleCell : Cell {
     
     #region Properties
 
@@ -25,23 +26,27 @@ namespace Trapzoid.Agent {
 
     #region Public Methods
 
-    internal void DetermineFacing() {
-      if (LastTurnPosition.CompareTo(North) == 0) {
-        Facing = Facings.South;
-      } else if (LastTurnPosition.CompareTo(South) == 0) {
-        Facing = Facings.North;
-      } else if (LastTurnPosition.CompareTo(East) == 0) {
-        Facing = Facings.West;
-      } else {
-        Facing = Facings.East;
+    /// <summary>
+    /// Determines the facing of the light cycle
+    /// </summary>
+    public void DetermineFacing() {
+      if (LastTurnPosition != null) {
+        if (LastTurnPosition.CompareTo(North) == 0) {
+          North.Value = 0;
+          Facing = Facings.South;
+        } else if (LastTurnPosition.CompareTo(South) == 0) {
+          South.Value = 0;
+          Facing = Facings.North;
+        } else if (LastTurnPosition.CompareTo(East) == 0) {
+          East.Value = 0;
+          Facing = Facings.West;
+        } else {
+          West.Value = 0;
+          Facing = Facings.East;
+        }
       }
     }
 
-    public int CompareTo(object obj) {
-      return base.CompareTo(obj);
-    }
-
     #endregion
-
   }
 }

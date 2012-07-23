@@ -55,14 +55,24 @@ namespace Trapzoid.Agent {
           }
           if (!Cells[x].ContainsKey(y)) {
             CellContent content = Cell.GetWorldState(line[2]);
-            if (content == CellContent.Opponent) {
-              opponent = new OpponentCell() { X = x, Y = y, Content = content };
-              Cells[x].Add(y, opponent);
-            } else if (content == CellContent.You) {
-              player = new PlayerCell() { X = x, Y = y, Content = content };
-              Cells[x].Add(y, player);
-            } else {
-              Cells[x].Add(y, new Cell() { X = x, Y = y, Content = content });
+            switch (content) {
+              case CellContent.Opponent:
+                opponent = new OpponentCell() { X = x, Y = y, Content = content, Value = 0 };
+                Cells[x].Add(y, opponent);
+                break;
+              case CellContent.You:
+                player = new PlayerCell() { X = x, Y = y, Content = content, Value = 0 };
+                Cells[x].Add(y, player);
+                break;
+              case CellContent.OpponentWall:
+                Cells[x].Add(y, new Cell() { X = x, Y = y, Content = content, Value = 0 });
+                break;
+              case CellContent.YourWall:
+                Cells[x].Add(y, new Cell() { X = x, Y = y, Content = content, Value = 0 });
+                break;
+              case CellContent.Clear:
+                Cells[x].Add(y, new Cell() { X = x, Y = y, Content = content, Value = 1 });
+                break;
             }
           }
           builtWorld = true;
@@ -77,13 +87,6 @@ namespace Trapzoid.Agent {
         }
       }
       return builtWorld;
-    }
-
-    private void LoadPositions(LightCycleCell lightCycle) {
-      lightCycle.North = GetNorthPosition(lightCycle);
-      lightCycle.South = GetSouthPosition(lightCycle);
-      lightCycle.East = GetEastPosition(lightCycle);
-      lightCycle.West = GetWestPosition(lightCycle);
     }
 
     /// <summary>
@@ -122,18 +125,26 @@ namespace Trapzoid.Agent {
     #endregion
 
     #region Private Methods
+
+    private void LoadPositions(LightCycleCell lightCycle) {
+      lightCycle.North = GetNorthPosition(lightCycle);
+      lightCycle.South = GetSouthPosition(lightCycle);
+      lightCycle.East = GetEastPosition(lightCycle);
+      lightCycle.West = GetWestPosition(lightCycle);
+    }
+
     /// <summary>
     /// Retrieves the position north of the cell
     /// </summary>
     /// <param name="position">Position to check against</param>
     /// <returns>Cell north of the current cell</returns>
     private Cell GetNorthPosition(Cell position) {
-      int y = (position.Y == 0) ? Cells.Count - 1 : position.Y - 1;      
+      int y = (position.Y == 0) ? Cells.Count - 1 : position.Y - 1;
       return Cells[position.X][y];
     }
 
     private Cell GetSouthPosition(Cell position) {
-      int y = (position.Y == Cells.Count - 1) ? 0 : position.Y + 1;      
+      int y = (position.Y == Cells.Count - 1) ? 0 : position.Y + 1;
       return Cells[position.X][y];
     }
 
@@ -143,7 +154,7 @@ namespace Trapzoid.Agent {
     }
 
     private Cell GetWestPosition(Cell position) {
-      int x = (position.X == 0) ? Cells.Count - 1 : position.X - 1;      
+      int x = (position.X == 0) ? Cells.Count - 1 : position.X - 1;
       return Cells[x][position.Y];
     }
 

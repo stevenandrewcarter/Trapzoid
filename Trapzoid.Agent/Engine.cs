@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Trapzoid.Agent {
   /// <summary>
@@ -27,6 +26,8 @@ namespace Trapzoid.Agent {
     public World MoveResult { get; private set; }
     /// <summary> Current position of the player </summary>
     public PlayerCell PlayerPosition { get; private set; }
+    /// <summary> Current position of the opponent </summary>
+    public OpponentCell OpponentPosition { get; private set; }
 
     #endregion    
 
@@ -63,12 +64,16 @@ namespace Trapzoid.Agent {
           if (cell.Content == CellContent.You) {
             PlayerPosition = (PlayerCell)cell;
             MoveResult.Cells[i].Add(j, new Cell() { X = i, Y = j, Content = CellContent.YourWall, Value = 0 });
+          } else if (cell.Content == CellContent.Opponent) {
+            OpponentPosition = (OpponentCell)cell;
+            MoveResult.Cells[i].Add(j, new Cell() { X = i, Y = j, Content = CellContent.OpponentWall, Value = 0 });
           } else {
             MoveResult.Cells[i].Add(j, cell);
           }
         }
       }
       MovePlayer();
+      MoveOpponent();
       return MoveResult;
     }
 
@@ -76,13 +81,47 @@ namespace Trapzoid.Agent {
 
     #region Private Methods
 
+    private void MoveOpponent() {
+      MoveResult.Cells[OpponentPosition.X][OpponentPosition.Y].Content = CellContent.OpponentWall;
+      // Check facing
+      Cell bestMove = OpponentPosition;
+      if (OpponentPosition.North.Value > bestMove.Value) {
+        bestMove = OpponentPosition.North;
+      }
+      if (OpponentPosition.South.Value > bestMove.Value) {
+        bestMove = OpponentPosition.South;
+      }
+      if (OpponentPosition.East.Value > bestMove.Value) {
+        bestMove = OpponentPosition.East;
+      }
+      if (OpponentPosition.West.Value > bestMove.Value) {
+        bestMove = OpponentPosition.West;
+      }
+      bestMove.Content = CellContent.Opponent;
+      MoveResult.Cells[bestMove.X][bestMove.Y] = bestMove;      
+    }
+
     /// <summary>
     /// Moves the player to an acceptable position
     /// </summary>
     private void MovePlayer() {
       MoveResult.Cells[PlayerPosition.X][PlayerPosition.Y].Content = CellContent.YourWall;
-      PlayerPosition.X += 1;
-      MoveResult.Cells[PlayerPosition.X][PlayerPosition.Y] = PlayerPosition;
+      // Check facing
+      Cell bestMove = PlayerPosition;
+      if (PlayerPosition.North.Value > bestMove.Value) {
+        bestMove = PlayerPosition.North;
+      }
+      if (PlayerPosition.South.Value > bestMove.Value) {
+        bestMove = PlayerPosition.South;
+      }
+      if (PlayerPosition.East.Value > bestMove.Value) {
+        bestMove = PlayerPosition.East;
+      }
+      if (PlayerPosition.West.Value > bestMove.Value) {
+        bestMove = PlayerPosition.West;
+      }
+      bestMove.Content = CellContent.You;
+      MoveResult.Cells[bestMove.X][bestMove.Y] = bestMove;      
     }
 
     #endregion    

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Trapzoid.Agent {
 
   /// <summary>
@@ -58,12 +54,12 @@ namespace Trapzoid.Agent {
         case "YourWall": state = CellContent.YourWall; break;
         case "You": state = CellContent.You; break;
         case "Opponent": state = CellContent.Opponent; break;
-        case "OppenentWall": state = CellContent.OpponentWall; break;
+        case "OpponentWall": state = CellContent.OpponentWall; break;
       }
       return state;
     }
 
-    public int CompareTo(object obj) {      
+    public virtual int CompareTo(object obj) {      
       // Cast object to a cell
       Cell compareCell = (Cell)obj;
       return compareCell.X == X && compareCell.Y == Y ? 0 : 1;

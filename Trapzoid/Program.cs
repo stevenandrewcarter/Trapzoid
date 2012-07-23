@@ -5,23 +5,25 @@ using Trapzoid.Agent;
 namespace Trapzoid {
   class Program {    
 
-    static void Main(string[] args) {
-      var engine = new Engine();
-      // Read the previous state of the world
-      engine = LoadPreviousTurn(engine, "history.state");
-      // Read the state of the world
-      engine = LoadCurrentTurn(engine, args[0]);
-      Console.Read();
-      // Calculate next best move
-      var turnResult = engine.Process();
-      // Save state to memory
-      Console.BackgroundColor = ConsoleColor.Black;
-      Console.Clear();
-      turnResult.DisplayWorld();
-      // Write move to file  
-      string writeToFile = turnResult.GetWorld();
-      File.WriteAllText("history.state", writeToFile);
-      Console.ReadLine();
+    static void Main(string[] args) {      
+      while (true) {
+        Console.SetCursorPosition(0, 0);
+        var engine = new Engine();
+        // Read the previous state of the world
+        engine = LoadPreviousTurn(engine, "history.state");
+        // Read the state of the world
+        engine = LoadCurrentTurn(engine, args[0]);
+        // Save the state of the world to history
+        SaveTurnState("history.state", engine.Sensor.CurrentTurn.GetWorld());        
+        // Calculate next best move
+        var turnResult = engine.Process();        
+        // Write move to file         
+        SaveTurnState(args[0], turnResult.GetWorld());                
+      }
+    }
+
+    private static void SaveTurnState(string fileName, string turnState) {
+      File.WriteAllText(fileName, turnState);
     }
 
     /// <summary>
