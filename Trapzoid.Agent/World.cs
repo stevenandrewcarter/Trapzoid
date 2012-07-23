@@ -44,6 +44,8 @@ namespace Trapzoid.Agent {
     public bool BuildWorld(string[] newWorld) {
       bool builtWorld = false;
       if (newWorld.Length > 0) {
+        OpponentCell opponent = null;
+        PlayerCell player = null;
         for (var i = 0; i < newWorld.Length; i++) {
           string[] line = newWorld[i].Split(' ');
           int x = int.Parse(line[0]);
@@ -54,21 +56,34 @@ namespace Trapzoid.Agent {
           if (!Cells[x].ContainsKey(y)) {
             CellContent content = Cell.GetWorldState(line[2]);
             if (content == CellContent.Opponent) {
-              OpponentCell opponent = new OpponentCell() { X = x, Y = y, Content = content };
+              opponent = new OpponentCell() { X = x, Y = y, Content = content };
               Cells[x].Add(y, opponent);
-              if (LoadOpponentPositionEvent != null) { LoadOpponentPositionEvent(opponent); }
             } else if (content == CellContent.You) {
-              PlayerCell player = new PlayerCell() { X = x, Y = y, Content = content };
+              player = new PlayerCell() { X = x, Y = y, Content = content };
               Cells[x].Add(y, player);
-              if (LoadOpponentPositionEvent != null) { LoadPlayerPositionEvent(player); }
             } else {
               Cells[x].Add(y, new Cell() { X = x, Y = y, Content = content });
             }
           }
           builtWorld = true;
         }
+        if (LoadOpponentPositionEvent != null) {
+          LoadPositions(opponent);
+          LoadOpponentPositionEvent(opponent);
+        }
+        if (LoadOpponentPositionEvent != null) {
+          LoadPositions(player);
+          LoadPlayerPositionEvent(player);
+        }
       }
       return builtWorld;
+    }
+
+    private void LoadPositions(LightCycleCell lightCycle) {
+      lightCycle.North = GetNorthPosition(lightCycle);
+      lightCycle.South = GetSouthPosition(lightCycle);
+      lightCycle.East = GetEastPosition(lightCycle);
+      lightCycle.West = GetWestPosition(lightCycle);
     }
 
     /// <summary>
@@ -104,56 +119,31 @@ namespace Trapzoid.Agent {
       return result;
     }
 
+    #endregion
+
+    #region Private Methods
     /// <summary>
     /// Retrieves the position north of the cell
     /// </summary>
     /// <param name="position">Position to check against</param>
     /// <returns>Cell north of the current cell</returns>
-    public Cell GetNorthPosition(Cell position) {
-      int y = position.Y;
-      if (position.Y == 0) {
-        y = Cells.Count - 1;
-      } else if (position.Y == Cells.Count - 1) {
-        y = 0;
-      } else {
-        y -= 1;
-      }
+    private Cell GetNorthPosition(Cell position) {
+      int y = (position.Y == 0) ? Cells.Count - 1 : position.Y - 1;      
       return Cells[position.X][y];
     }
 
-    public Cell GetSouthPosition(Cell position) {
-      int y = position.Y;
-      if (position.Y == 0) {
-        y = Cells.Count - 1;
-      } else if (position.Y == Cells.Count - 1) {
-        y = 0;
-      } else {
-        y += 1;
-      }
+    private Cell GetSouthPosition(Cell position) {
+      int y = (position.Y == Cells.Count - 1) ? 0 : position.Y + 1;      
       return Cells[position.X][y];
     }
 
-    public Cell GetEastPosition(Cell position) {
-      int x = position.X;
-      if (position.X == 0) {
-        x = Cells.Count - 1;
-      } else if (position.X == Cells.Count - 1) {
-        x = 0;
-      } else {
-        x += 1;
-      }
+    private Cell GetEastPosition(Cell position) {
+      int x = (position.X == Cells.Count - 1) ? 0 : position.X + 1;
       return Cells[x][position.Y];
     }
 
-    public Cell GetWestPosition(Cell position) {
-      int x = position.X;
-      if (position.X == 0) {
-        x = Cells.Count - 1;
-      } else if (position.X == Cells.Count - 1) {
-        x = 0;
-      } else {
-        x -= 1;
-      }
+    private Cell GetWestPosition(Cell position) {
+      int x = (position.X == 0) ? Cells.Count - 1 : position.X - 1;      
       return Cells[x][position.Y];
     }
 

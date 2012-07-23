@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 
 namespace Trapzoid.Agent {
-  public class LightCycleCell : Cell {
+  public class LightCycleCell : Cell, IComparable {
+    
     #region Properties
 
     /// <summary> Indicates the facing of the Player </summary>
@@ -25,15 +26,19 @@ namespace Trapzoid.Agent {
     #region Public Methods
 
     internal void DetermineFacing() {
-      if (LastTurnPosition == North) {
+      if (LastTurnPosition.CompareTo(North) == 0) {
         Facing = Facings.South;
-      } else if (LastTurnPosition == South) {
+      } else if (LastTurnPosition.CompareTo(South) == 0) {
         Facing = Facings.North;
-      } else if (LastTurnPosition == East) {
+      } else if (LastTurnPosition.CompareTo(East) == 0) {
         Facing = Facings.West;
       } else {
         Facing = Facings.East;
       }
+    }
+
+    public int CompareTo(object obj) {
+      return base.CompareTo(obj);
     }
 
     #endregion

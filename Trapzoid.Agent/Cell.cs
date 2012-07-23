@@ -63,6 +63,12 @@ namespace Trapzoid.Agent {
       return state;
     }
 
+    public int CompareTo(object obj) {      
+      // Cast object to a cell
+      Cell compareCell = (Cell)obj;
+      return compareCell.X == X && compareCell.Y == Y ? 0 : 1;
+    }
+
     #endregion
   }
 }

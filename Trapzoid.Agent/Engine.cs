@@ -61,16 +61,7 @@ namespace Trapzoid.Agent {
         for (int j = 0; j < Sensor.CurrentTurn.Cells.Count; j++) {
           Cell cell = Sensor.CurrentTurn.Cells[i][j];
           if (cell.Content == CellContent.You) {
-            PlayerPosition = new PlayerCell() { 
-              Content = CellContent.You, 
-              Value = 0, 
-              X = cell.X, 
-              Y = cell.Y,
-              North = Sensor.CurrentTurn.GetNorthPosition(cell),
-              South = Sensor.CurrentTurn.GetSouthPosition(cell),
-              East = Sensor.CurrentTurn.GetEastPosition(cell),
-              West = Sensor.CurrentTurn.GetWestPosition(cell)
-            };
+            PlayerPosition = (PlayerCell)cell;
             MoveResult.Cells[i].Add(j, new Cell() { X = i, Y = j, Content = CellContent.YourWall, Value = 0 });
           } else {
             MoveResult.Cells[i].Add(j, cell);

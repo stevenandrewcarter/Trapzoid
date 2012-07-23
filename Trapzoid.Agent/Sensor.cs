@@ -77,10 +77,16 @@ namespace Trapzoid.Agent {
     }
 
     private void CurrentTurn_LoadPlayerPositionEvent(PlayerCell playerCell) {
+      Cell lastPosition = PlayerCell.LastTurnPosition;
+      PlayerCell = playerCell;
+      PlayerCell.LastTurnPosition = lastPosition;
       PlayerCell.DetermineFacing();
     }
 
     private void CurrentTurn_LoadOpponentPositionEvent(OpponentCell opponentCell) {
+      Cell lastPosition = OpponentCell.LastTurnPosition;
+      OpponentCell = opponentCell;
+      OpponentCell.LastTurnPosition = lastPosition;
       OpponentCell.DetermineFacing();
     }
 
