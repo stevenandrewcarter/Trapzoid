@@ -4,30 +4,48 @@ namespace Trapzoid.Agent {
   /// <summary>
   /// Represents the agents view of the world
   /// </summary>
-  public class Sensor {    
+  public class Sensor {
+
     #region Constructor
+
     /// <summary>
     /// Default Constructor
     /// </summary>
     public Sensor() {      
     }
+
     #endregion
 
     #region Properties
-    /// <summary> World state for the sensor </summary>
-    public World World { get; private set; }
+
+    /// <summary> Current state of the world </summary>
+    public World CurrentTurn { get; private set; }
+    /// <summary> Last state of the world </summary>
+    public World LastTurn { get; private set; }
+
     #endregion
 
-    #region Public Variables
+    #region Internal Methods
+
     /// <summary>
     /// Reads the current state of the world 
     /// </summary>
     /// <param name="file">Input for the sensor</param>
     /// <returns>True if the sensors could detect the world, false if something goes wrong</returns>
-    public bool Sense(string[] world) {
-      World = new World();
-      return World.BuildWorld(world);      
+    internal bool LoadCurrentTurn(string[] world) {
+      CurrentTurn = new World();
+      return CurrentTurn.BuildWorld(world);      
     }
-    #endregion
+
+    /// <summary>
+    /// Reads the last state of the world
+    /// </summary>
+    /// <param name="world">Last turn of the world</param>
+    internal void LoadLastTurn(string[] world) {
+      LastTurn = new World();
+      LastTurn.BuildWorld(world);
+    }
+
+    #endregion    
   }
 }

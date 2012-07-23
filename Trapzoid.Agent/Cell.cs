@@ -17,16 +17,35 @@ namespace Trapzoid.Agent {
   }
 
   /// <summary>
+  /// Indicates the facing of the Cycle
+  /// </summary>
+  public enum Facings {
+    North = 0,
+    East = 1,
+    South = 2,
+    West = 3
+  }
+
+  /// <summary>
   /// Represents a position in the world
   /// </summary>
   public class Cell {
+
     #region Properties
+
+    /// <summary> X Position of the Cell </summary>
     public int X { get; set; }
+    /// <summary> Y Position of the Cell </summary>
     public int Y { get; set; }
+    /// <summary> Content of the Cell </summary>
     public CellContent Content { get; set; }
+    /// <summary> Value of the move to the cell </summary>
+    public double Value { get; set; }
+
     #endregion
 
     #region Public Methods
+
     /// <summary>
     /// Determines the World State from the input
     /// </summary>
@@ -43,6 +62,7 @@ namespace Trapzoid.Agent {
       }
       return state;
     }
+
     #endregion
   }
 }
