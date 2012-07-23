@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Trapzoid.Agent {
 
+  public delegate void LoadPlayerPositionEventHandler(PlayerCell playerCell);
+  public delegate void LoadOpponentPositionEventHandler(OpponentCell playerCell);
+
   /// <summary>
   /// Represents the world
   /// </summary>
@@ -26,6 +29,11 @@ namespace Trapzoid.Agent {
 
     #endregion
 
+    #region Events
+    public event LoadOpponentPositionEventHandler LoadOpponentPositionEvent;
+    public event LoadPlayerPositionEventHandler LoadPlayerPositionEvent;
+    #endregion
+
     #region Public Methods
 
     /// <summary>
@@ -46,7 +54,13 @@ namespace Trapzoid.Agent {
           if (!Cells[x].ContainsKey(y)) {
             CellContent content = Cell.GetWorldState(line[2]);
             if (content == CellContent.Opponent) {
-              Cells[x].Add(y, new OpponentCell() { X = x, Y = y, Content = content });
+              OpponentCell opponent = new OpponentCell() { X = x, Y = y, Content = content };
+              Cells[x].Add(y, opponent);
+              if (LoadOpponentPositionEvent != null) { LoadOpponentPositionEvent(opponent); }
+            } else if (content == CellContent.You) {
+              PlayerCell player = new PlayerCell() { X = x, Y = y, Content = content };
+              Cells[x].Add(y, player);
+              if (LoadOpponentPositionEvent != null) { LoadPlayerPositionEvent(player); }
             } else {
               Cells[x].Add(y, new Cell() { X = x, Y = y, Content = content });
             }

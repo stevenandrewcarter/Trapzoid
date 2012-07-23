@@ -32,11 +32,20 @@ namespace Trapzoid.Agent {
 
     #region Public Methods
 
-    public bool SenseCurrentWorld(string[] world) {      
+    /// <summary>
+    /// Loads the state of the current turn
+    /// </summary>
+    /// <param name="world">World state to load</param>
+    /// <returns>True if the world was loaded succesfully</returns>
+    public bool LoadCurrentTurn(string[] world) {      
       bool loaded = !Sensor.LoadCurrentTurn(world);
       return loaded;
     }
 
+    /// <summary>
+    /// Loads the state of the previous turn
+    /// </summary>
+    /// <param name="world">History state of the wolrd to load</param>
     public void RemeberLastTurn(string[] world) {
       Sensor.LoadLastTurn(world);
     }

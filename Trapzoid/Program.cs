@@ -8,9 +8,9 @@ namespace Trapzoid {
     static void Main(string[] args) {
       var engine = new Engine();
       // Read the previous state of the world
-      engine = ReadPreviousWorld(engine, "history.state");
+      engine = LoadPreviousTurn(engine, "history.state");
       // Read the state of the world
-      engine = ReadCurrentWorld(engine, args[0]);
+      engine = LoadCurrentTurn(engine, args[0]);
       Console.Read();
       // Calculate next best move
       var turnResult = engine.Process();
@@ -24,7 +24,13 @@ namespace Trapzoid {
       Console.ReadLine();
     }
 
-    private static Engine ReadPreviousWorld(Engine engine, string historyWorld) {
+    /// <summary>
+    /// Loads the previous state of the world
+    /// </summary>
+    /// <param name="engine">Agent engine</param>
+    /// <param name="historyWorld">Location of the history state file</param>
+    /// <returns>Engine with the loaded previous turn</returns>
+    private static Engine LoadPreviousTurn(Engine engine, string historyWorld) {
       if (File.Exists(historyWorld)) {
         string[] world = File.ReadAllLines(historyWorld);
         engine.RemeberLastTurn(world);
@@ -32,9 +38,15 @@ namespace Trapzoid {
       return engine;
     }
 
-    private static Engine ReadCurrentWorld(Engine engine, string currentWorld) {
+    /// <summary>
+    /// Loads the current state of the world
+    /// </summary>
+    /// <param name="engine">Agent engine</param>
+    /// <param name="currentWorld">Location of the current state file</param>
+    /// <returns>Engine with the current turn</returns>
+    private static Engine LoadCurrentTurn(Engine engine, string currentWorld) {
       string[] world = File.ReadAllLines(currentWorld);
-      engine.SenseCurrentWorld(world);
+      engine.LoadCurrentTurn(world);
       engine.Sensor.CurrentTurn.DisplayWorld();
       return engine;
     }

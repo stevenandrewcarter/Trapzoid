@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace Trapzoid.Agent {
-  public class OpponentCell : Cell {
-    public Facings Facing { get; set; }
+
+  /// <summary>
+  /// Cell which represents the opponent
+  /// </summary>
+  public class OpponentCell : LightCycleCell {
   }
 }
