@@ -102,6 +102,7 @@ namespace Trapzoid.Agent {
             case CellContent.YourWall: Console.BackgroundColor = ConsoleColor.DarkBlue; break;
             case CellContent.Clear: Console.BackgroundColor = ConsoleColor.Gray; break;
           }
+          Console.SetCursorPosition(i, j);
           Console.Write((int)Cells[i][j].Content);
         }
         Console.WriteLine();
@@ -126,6 +127,10 @@ namespace Trapzoid.Agent {
 
     #region Private Methods
 
+    /// <summary>
+    /// Loads the positions around the light cycle
+    /// </summary>
+    /// <param name="lightCycle">Light cycle to load positions for</param>
     private void LoadPositions(LightCycleCell lightCycle) {
       lightCycle.North = GetNorthPosition(lightCycle);
       lightCycle.South = GetSouthPosition(lightCycle);
@@ -143,16 +148,31 @@ namespace Trapzoid.Agent {
       return Cells[position.X][y];
     }
 
+    /// <summary>
+    /// Retrieves the position South of the cell
+    /// </summary>
+    /// <param name="position">Position to check against</param>
+    /// <returns>Cell south of the current cell</returns>
     private Cell GetSouthPosition(Cell position) {
       int y = (position.Y == Cells.Count - 1) ? 0 : position.Y + 1;
       return Cells[position.X][y];
     }
 
+    /// <summary>
+    /// Retrieves the position east of the cell
+    /// </summary>
+    /// <param name="position">Position to check against</param>
+    /// <returns>Cell east of the current cell</returns>
     private Cell GetEastPosition(Cell position) {
       int x = (position.X == Cells.Count - 1) ? 0 : position.X + 1;
       return Cells[x][position.Y];
     }
 
+    /// <summary>
+    /// Retrieves the position west of the cell
+    /// </summary>
+    /// <param name="position">Position to check against</param>
+    /// <returns>Cell west of the current cell</returns>
     private Cell GetWestPosition(Cell position) {
       int x = (position.X == 0) ? Cells.Count - 1 : position.X - 1;
       return Cells[x][position.Y];
