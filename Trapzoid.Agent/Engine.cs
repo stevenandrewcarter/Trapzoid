@@ -55,12 +55,14 @@ namespace Trapzoid.Agent {
     /// Processes the turn for the agent
     /// </summary>
     /// <returns>The state that the world will for the turn</returns>
-    public World Process() {
+    public World Process() {      
+      // Create a new set for the results
       MoveResult.Cells = new Dictionary<int, Dictionary<int, Cell>>();
       for (int i = 0; i < Sensor.CurrentTurn.Cells.Count; i++) {
         MoveResult.Cells.Add(i, new Dictionary<int, Cell>());
         for (int j = 0; j < Sensor.CurrentTurn.Cells.Count; j++) {
           Cell cell = Sensor.CurrentTurn.Cells[i][j];
+          Sensor.CurrentTurn.LoadPositions(cell);
           if (cell.Content == CellContent.You) {
             PlayerPosition = (PlayerCell)cell;
             MoveResult.Cells[i].Add(j, new Cell() { X = i, Y = j, Content = CellContent.YourWall, Value = 0 });
@@ -69,17 +71,30 @@ namespace Trapzoid.Agent {
             MoveResult.Cells[i].Add(j, new Cell() { X = i, Y = j, Content = CellContent.OpponentWall, Value = 0 });
           } else {
             MoveResult.Cells[i].Add(j, cell);
-          }
+          }          
         }
       }
+      // Calculate the MoveResult
+      CalculateBestMove();
       MovePlayer();
       MoveOpponent();
       return MoveResult;
-    }
+    }    
 
     #endregion
 
     #region Private Methods
+
+    private void CalculateBestMove() {
+      for (int i = 0; i < Sensor.CurrentTurn.Cells.Count; i++) {
+        for (int j = 0; j < Sensor.CurrentTurn.Cells.Count; j++) {
+          Cell cell = MoveResult.Cells[i][j];
+          if (cell.Content == CellContent.Clear) {
+            cell.Calculate();
+          }
+        }
+      }
+    }
 
     private void MoveOpponent() {
       MoveResult.Cells[OpponentPosition.X][OpponentPosition.Y].Content = CellContent.OpponentWall;

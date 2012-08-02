@@ -123,20 +123,20 @@ namespace Trapzoid.Agent {
       return result;
     }
 
-    #endregion
-
-    #region Private Methods
-
     /// <summary>
     /// Loads the positions around the light cycle
     /// </summary>
     /// <param name="lightCycle">Light cycle to load positions for</param>
-    private void LoadPositions(LightCycleCell lightCycle) {
-      lightCycle.North = GetNorthPosition(lightCycle);
-      lightCycle.South = GetSouthPosition(lightCycle);
-      lightCycle.East = GetEastPosition(lightCycle);
-      lightCycle.West = GetWestPosition(lightCycle);
+    public void LoadPositions(Cell cell) {
+      cell.North = GetNorthPosition(cell);
+      cell.South = GetSouthPosition(cell);
+      cell.East = GetEastPosition(cell);
+      cell.West = GetWestPosition(cell);
     }
+
+    #endregion
+
+    #region Private Methods    
 
     /// <summary>
     /// Retrieves the position north of the cell
